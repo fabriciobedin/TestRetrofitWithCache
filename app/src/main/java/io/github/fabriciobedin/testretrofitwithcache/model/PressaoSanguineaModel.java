@@ -1,4 +1,4 @@
-package io.github.fabriciobedin.testretrofitwithcache;
+package io.github.fabriciobedin.testretrofitwithcache.model;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package io.github.fabriciobedin.testretrofitwithcache;
+package io.github.fabriciobedin.testretrofitwithcache.model;
 
 import java.util.Date;
 
@@ -199,7 +199,7 @@ public class PessoaModel {
     public void setCidCodigo(CidadeModel cidCodigo) {
         this.cidCodigo = cidCodigo;
     }
-    
+
 
     @Override
     public String toString() {
