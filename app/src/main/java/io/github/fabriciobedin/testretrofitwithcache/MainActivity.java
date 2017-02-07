@@ -9,6 +9,9 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.IOException;
+import java.util.List;
+
 import io.github.fabriciobedin.testretrofitwithcache.api.PressaoSanguineaAPI;
 import io.github.fabriciobedin.testretrofitwithcache.model.PressaoSanguineaModel;
 import io.github.fabriciobedin.testretrofitwithcache.util.PressaoSanguineaDeserializer;
@@ -46,7 +49,75 @@ public class MainActivity extends AppCompatActivity {
 
         PressaoSanguineaAPI pressaoSanguineaAPI = retrofit.create(PressaoSanguineaAPI.class);
 
+
+        //------------------------------------------------------------------------------------
         Call<PressaoSanguineaModel> call = pressaoSanguineaAPI.getPressaoSanguinea(1);
+        call.enqueue(new Callback<PressaoSanguineaModel>() {
+            @Override
+            public void onResponse(Call<PressaoSanguineaModel> call, Response<PressaoSanguineaModel> response) {
+                PressaoSanguineaModel pressao = response.body();
+                if(pressao != null){
+                    teste.setText(Html.fromHtml("Pressao SIS: "+pressao.getPsaValorsistolica()
+                            +"<br>Pressao DIA: "+pressao.getPsaValordiastolica()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PressaoSanguineaModel> call, Throwable t) {
+                Log.i(TAG, "Erro Especifico"+t.getMessage());
+            }
+        });
+
+        //one------------------------------------------------------------------------------------
+        call = pressaoSanguineaAPI.getOnePressaoSanguinea(1);
+        call.enqueue(new Callback<PressaoSanguineaModel>() {
+            @Override
+            public void onResponse(Call<PressaoSanguineaModel> call, Response<PressaoSanguineaModel> response) {
+                PressaoSanguineaModel pressao = response.body();
+                if(pressao != null){
+                    teste.setText(Html.fromHtml("Pressao SIS: "+pressao.getPsaValorsistolica()
+                            +"<br>Pressao DIA: "+pressao.getPsaValordiastolica()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PressaoSanguineaModel> call, Throwable t) {
+                Log.i(TAG, "erro one: "+t.getMessage());
+            }
+        });
+
+        //many------------------------------------------------------------------------------------
+        final Call<List<PressaoSanguineaModel>> callList = pressaoSanguineaAPI.getManyPressaoSanguinea(1);
+
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+
+                try {
+                    List<PressaoSanguineaModel> listPressao = callList.execute().body();
+
+                    if(listPressao != null){
+                        for( PressaoSanguineaModel p : listPressao){
+
+                        }
+
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.i(TAG, "Iniciou a thread");
+                    }
+                });
+            }
+        }.start();
+
 
         call.enqueue(new Callback<PressaoSanguineaModel>() {
             @Override
@@ -60,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<PressaoSanguineaModel> call, Throwable t) {
-                Log.i(TAG, "erro");
+                Log.i(TAG, "erro many" +t.getMessage());
             }
         });
     }
