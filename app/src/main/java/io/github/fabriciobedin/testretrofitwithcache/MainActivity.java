@@ -68,23 +68,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //one------------------------------------------------------------------------------------
-        call = pressaoSanguineaAPI.getOnePressaoSanguinea(1);
-        call.enqueue(new Callback<PressaoSanguineaModel>() {
-            @Override
-            public void onResponse(Call<PressaoSanguineaModel> call, Response<PressaoSanguineaModel> response) {
-                PressaoSanguineaModel pressao = response.body();
-                if(pressao != null){
-                    teste.setText(Html.fromHtml("Pressao SIS: "+pressao.getPsaValorsistolica()
-                            +"<br>Pressao DIA: "+pressao.getPsaValordiastolica()));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<PressaoSanguineaModel> call, Throwable t) {
-                Log.i(TAG, "erro one: "+t.getMessage());
-            }
-        });
+//        //one------------------------------------------------------------------------------------
+//        call = pressaoSanguineaAPI.getOnePressaoSanguinea(1);
+//        call.enqueue(new Callback<PressaoSanguineaModel>() {
+//            @Override
+//            public void onResponse(Call<PressaoSanguineaModel> call, Response<PressaoSanguineaModel> response) {
+//                PressaoSanguineaModel pressao = response.body();
+//                if(pressao != null){
+//                    teste.setText(Html.fromHtml("Pressao SIS: "+pressao.getPsaValorsistolica()
+//                            +"<br>Pressao DIA: "+pressao.getPsaValordiastolica()));
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<PressaoSanguineaModel> call, Throwable t) {
+//                Log.i(TAG, "erro one: "+t.getMessage());
+//            }
+//        });
 
         //many------------------------------------------------------------------------------------
         final Call<List<PressaoSanguineaModel>> callList = pressaoSanguineaAPI.getManyPressaoSanguinea(1);
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if(listPressao != null){
                         for( PressaoSanguineaModel p : listPressao){
-
+                            Log.i(TAG, "Pressao: "+p.getPsaValordiastolica());
                         }
 
                     }
@@ -112,27 +112,11 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.i(TAG, "Iniciou a thread");
+                        Log.i(TAG, "Request OK");
                     }
                 });
             }
         }.start();
 
-
-        call.enqueue(new Callback<PressaoSanguineaModel>() {
-            @Override
-            public void onResponse(Call<PressaoSanguineaModel> call, Response<PressaoSanguineaModel> response) {
-                PressaoSanguineaModel pressao = response.body();
-                if(pressao != null){
-                    teste.setText(Html.fromHtml("Pressao SIS: "+pressao.getPsaValorsistolica()
-                            +"<br>Pressao DIA: "+pressao.getPsaValordiastolica()));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<PressaoSanguineaModel> call, Throwable t) {
-                Log.i(TAG, "erro many" +t.getMessage());
-            }
-        });
     }
 }
